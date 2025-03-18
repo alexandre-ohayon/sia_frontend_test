@@ -8,6 +8,7 @@ beforeAll(() => {
       json: () =>
         Promise.resolve([
           { id: 1, label: "Boisson", children: [{ id: 2, label: "Eau" }] },
+          { id: 3, label: "Beauté", children: [{ id: 4, label: "Parfum" }] }
         ]),
     })
   );
@@ -21,24 +22,31 @@ afterEach(() => {
 test("affiche la liste des éléments", async () => {
   render(<MultiSelect />);
   
-  // Attendre que l'élément "Boisson" soit chargé
   await waitFor(() => screen.getByText("Boisson"));
 
   expect(screen.getByText("Boisson")).toBeInTheDocument();
+  expect(screen.getByText("Beauté")).toBeInTheDocument();
 });
 
 test("permet de sélectionner un élément", async () => {
   render(<MultiSelect />);
   
-  // Attendre l'affichage de la liste
   await waitFor(() => screen.getByText("Boisson"));
 
-  // Sélectionner la checkbox
-  const checkbox = await screen.findByRole("checkbox", { name: /boisson/i });
+  const checkboxes = await screen.findAllByRole("checkbox");
+  const checkbox = checkboxes[0];
 
-  // Simuler un clic
   fireEvent.click(checkbox);
   
-  // Vérifier que la case est bien cochée
   expect(checkbox).toBeChecked();
+});
+
+test("permet de rechercher un élément", async () => {
+  render(<MultiSelect />);
+  
+  const searchInput = screen.getByPlaceholderText("Rechercher...");
+  fireEvent.change(searchInput, { target: { value: "Boisson" } });
+
+  expect(await screen.findByText("Boisson")).toBeInTheDocument();
+  expect(screen.queryByText("Beauté")).not.toBeInTheDocument(); // Beauté doit disparaître
 });
