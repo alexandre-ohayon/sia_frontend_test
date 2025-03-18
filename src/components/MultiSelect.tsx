@@ -21,12 +21,14 @@ const MultiSelect = () => {
         .filter(item => item.label.toLowerCase().includes(search.toLowerCase()))
         .map(item => (
           <li key={item.id}>
-            <input
-              type="checkbox"
-              checked={selectedItems.includes(item.id)}
-              onChange={() => toggleSelection(item.id)}
-            />
-            {item.label}
+            <label> 
+              <input
+                type="checkbox"
+                checked={selectedItems.includes(item.id)}
+                onChange={() => toggleSelection(item.id)}
+              />
+              {item.label}
+            </label>
             {item.children && renderOptions(item.children, depth + 1)}
           </li>
         ))}
