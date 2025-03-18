@@ -16,17 +16,17 @@ const MultiSelect = () => {
   const { selectedItems, toggleSelection } = useMultiSelect(data);
 
   // 🔍 Filtrer l'arbre pour inclure les éléments correspondant à la recherche et leurs parents
-  const filterTree = (items: any[], search: string) => {
+  const filterTree = (items: any[], search: string): any[] => {
     return items
       .map(item => {
         const matches = item.label.toLowerCase().includes(search.toLowerCase());
-        const filteredChildren = item.children ? filterTree(item.children, search) : [];
+        const filteredChildren: any[] = item.children ? filterTree(item.children, search) : [];
         if (matches || filteredChildren.length > 0) {
           return { ...item, children: filteredChildren };
         }
         return null;
       })
-      .filter(Boolean); // Supprime les `null`
+      .filter(Boolean);
   };
 
   // 📌 Trouver un label par ID (pour afficher les sélections correctement)
