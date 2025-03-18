@@ -7,11 +7,12 @@ const MultiSelect = () => {
   const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
-    // Simulation d'un appel API
     fetch("/data.json")
-      .then(res => res.json())
-      .then(json => setData(transformData(json)));
-  }, []);
+        .then(res => res.json())
+        .then(json => setData(transformData(json)))
+        .catch(err => console.error("Erreur de chargement du JSON", err));
+}, []);
+
 
   const { selectedItems, toggleSelection } = useMultiSelect(data);
 
